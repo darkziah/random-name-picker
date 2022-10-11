@@ -46,7 +46,7 @@ import { get } from 'lodash';
 
   const soundEffects = new SoundEffects();
 
-  let MAX_REEL_ITEMS = parseInt(get(reactCountInput, 'value', '40'), 10);
+  let MAX_REEL_ITEMS = parseInt(get(reactCountInput, 'value', '40'), 10) * 10;
 
   const CONFETTI_COLORS = ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff'];
   let confettiAnimationId;
@@ -124,7 +124,7 @@ import { get } from 'lodash';
 
   // Click handler for "Change Real" button
   reactCountInput.addEventListener('blur', function event() {
-    MAX_REEL_ITEMS = parseInt(this.value, 10);
+    MAX_REEL_ITEMS = parseInt(this.value, 10) * 10;
     slot = slot.changeReelItem(parseInt(this.value, 10));
     console.log(slot);
   });

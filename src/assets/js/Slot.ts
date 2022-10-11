@@ -186,12 +186,19 @@ export default class Slot {
         { transform: `translateY(-${(this.maxReelItems - 1) * (7.5 * 16)}px)`, filter: 'blur(0)' }
       ],
       {
-        // eslint-disable-next-line max-len
-        duration: this.maxReelItems < 200 ? this.maxReelItems * 100 : this.maxReelItems * 80, // 100ms for 1 item
+
+        duration: this.maxReelItems * 100, // 100ms for 1 item
         easing: 'ease-in-out',
         iterations: 1
       }
     );
+
+    console.log({
+
+      duration: this.maxReelItems * 100, // 100ms for 1 item
+      easing: 'ease-in-out',
+      iterations: 1
+    }, reelAnimation);
 
     const { reelContainer, shouldRemoveWinner } = this;
     if (!reelContainer || !reelAnimation) {
