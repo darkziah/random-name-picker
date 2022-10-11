@@ -151,21 +151,49 @@ export default class Slot {
     return result;
   }
 
+  public changeReelItem(count: number) {
+    this.maxReelItems = count;
+
+    return this;
+  }
+
   /**
    * Function for spinning the slot
    * @returns Whether the spin is completed successfully
    */
-  public async spin(): Promise<boolean> {
+  public async spin(realItem?: number): Promise<boolean> {
     if (!this.nameList.length) {
       console.error('Name List is empty. Cannot start spinning.');
       return false;
     }
 
+    if (realItem) {
+      this.maxReelItems = realItem;
+    }
+
     if (this.onSpinStart) {
       this.onSpinStart();
     }
+    let { reelAnimation } = this;
 
-    const { reelContainer, reelAnimation, shouldRemoveWinner } = this;
+    reelAnimation = this.reelContainer?.animate(
+      [
+        { transform: 'none', filter: 'blur(0)' },
+        { filter: 'blur(1px)', offset: 0.5 },
+        // Here we transform the reel to move up and stop at the top of last item
+        // "(Number of item - 1) * height of reel item" of wheel is the amount of pixel to move up
+        // 7.5rem * 16 = 120px, which equals to reel item height
+        { transform: `translateY(-${(this.maxReelItems - 1) * (7.5 * 16)}px)`, filter: 'blur(0)' }
+      ],
+      {
+        // eslint-disable-next-line max-len
+        duration: this.maxReelItems < 200 ? this.maxReelItems * 100 : this.maxReelItems * 80, // 100ms for 1 item
+        easing: 'ease-in-out',
+        iterations: 1
+      }
+    );
+
+    const { reelContainer, shouldRemoveWinner } = this;
     if (!reelContainer || !reelAnimation) {
       return false;
     }
@@ -189,6 +217,7 @@ export default class Slot {
 
     reelContainer.appendChild(fragment);
 
+    console.log('Max item: ', this.maxReelItems);
     console.log('Displayed items: ', randomNames);
     console.log('Winner: ', randomNames[randomNames.length - 1]);
 
@@ -203,7 +232,7 @@ export default class Slot {
 
     // Play the spin animation
     const animationPromise = new Promise((resolve) => {
-      reelAnimation.onfinish = resolve;
+      reelAnimation!.onfinish = resolve;
     });
 
     reelAnimation.play();

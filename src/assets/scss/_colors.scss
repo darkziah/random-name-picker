@@ -17,6 +17,13 @@ $color-purple-step4: #5f32d8;
 $color-purple-step5: #4828bc;
 $color-purple-step6: #3f25b2;
 
+$color-green-step1: #205072;
+$color-green-step2: #2b8381;
+$color-green-step3: #329d9c;
+$color-green-step4: #56c596;
+$color-green-step5: #7be495;
+$color-green-step6: #cff4d2;
+
 $color-yellow: #ffbf1f;
 $color-blood-orange: #e54c23;
 $color-shadow: rgba($color-black, 0.2);
@@ -29,13 +36,13 @@ $color-link-hover: rgba($color-white, 0.9);
 
 // button
 $color-button-text: $color-white;
-$color-button-default-background: $color-yellow;
-$color-button-default-hover-background: lighten($color-yellow, 5%);
+$color-button-default-background: $color-black;
+$color-button-default-hover-background: lighten($color-green-step1, 5%);
 $color-button-danger-background: $color-blood-orange;
 $color-button-danger-hover-background: lighten($color-blood-orange, 5%);
 
 // slot
-$color-slot-background: $color-yellow;
+$color-slot-background: $color-black;
 $color-slot-shadow: $color-shadow;
 $color-slot-inner-background: $color-white;
 $color-slot-text: $color-black;
@@ -44,6 +51,7 @@ $color-slot-text: $color-black;
 $color-settings-mask: rgba($color-black, 0.6);
 $color-settings-background-red: darken($color-red-step5, 8%);
 $color-settings-background-purple: darken($color-purple-step6, 8%);
+$color-settings-background-green: darken($color-green-step4, 8%);
 
 // textarea
 $color-input-background: $color-light-grey;
@@ -54,3 +62,4 @@ $color-input-text: $color-black;
 $color-switch-handle-disabled: $color-dark-grey;
 $color-switch-handle-red: darken($color-red-step5, 8%);
 $color-switch-handle-purple: darken($color-purple-step6, 8%);
+$color-switch-handle-green: darken($color-green-step2, 8%);

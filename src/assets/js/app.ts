@@ -1,6 +1,7 @@
 import confetti from 'canvas-confetti';
 import Slot from '@js/Slot';
 import SoundEffects from '@js/SoundEffects';
+import { get } from 'lodash';
 
 // Initialize slot machine
 (() => {
@@ -16,6 +17,7 @@ import SoundEffects from '@js/SoundEffects';
   const nameListTextArea = document.getElementById('name-list') as HTMLTextAreaElement | null;
   const removeNameFromListCheckbox = document.getElementById('remove-from-list') as HTMLInputElement | null;
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
+  const reactCountInput = document.getElementById('real-count') as HTMLInputElement | null;
 
   // Graceful exit if necessary elements are not found
   if (!(
@@ -31,6 +33,7 @@ import SoundEffects from '@js/SoundEffects';
     && nameListTextArea
     && removeNameFromListCheckbox
     && enableSoundCheckbox
+    && reactCountInput
   )) {
     console.error('One or more Element ID is invalid. This is possibly a bug.');
     return;
@@ -42,7 +45,9 @@ import SoundEffects from '@js/SoundEffects';
   }
 
   const soundEffects = new SoundEffects();
-  const MAX_REEL_ITEMS = 40;
+
+  let MAX_REEL_ITEMS = parseInt(get(reactCountInput, 'value', '40'), 10);
+
   const CONFETTI_COLORS = ['#26ccff', '#a25afd', '#ff5e7e', '#88ff5a', '#fcff42', '#ffa62d', '#ff36ff'];
   let confettiAnimationId;
 
@@ -58,7 +63,7 @@ import SoundEffects from '@js/SoundEffects';
     const confettiScale = Math.max(0.5, Math.min(1, windowWidth / 1100));
 
     customConfetti({
-      particleCount: 1,
+      particleCount: 10,
       gravity: 0.8,
       spread: 90,
       origin: { y: 0.6 },
@@ -95,7 +100,7 @@ import SoundEffects from '@js/SoundEffects';
   };
 
   /** Slot instance */
-  const slot = new Slot({
+  let slot = new Slot({
     reelContainerSelector: '#reel',
     maxReelItems: MAX_REEL_ITEMS,
     onSpinStart,
@@ -117,14 +122,19 @@ import SoundEffects from '@js/SoundEffects';
     settingsWrapper.style.display = 'none';
   };
 
+  // Click handler for "Change Real" button
+  reactCountInput.addEventListener('blur', function event() {
+    MAX_REEL_ITEMS = parseInt(this.value, 10);
+    slot = slot.changeReelItem(parseInt(this.value, 10));
+    console.log(slot);
+  });
   // Click handler for "Draw" button
   drawButton.addEventListener('click', () => {
     if (!slot.names.length) {
       onSettingsOpen();
       return;
     }
-
-    slot.spin();
+    slot.spin(MAX_REEL_ITEMS);
   });
 
   // Hide fullscreen button when it is not supported

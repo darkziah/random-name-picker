@@ -188,6 +188,11 @@
   color: $color-text-light;
 }
 
+.theme--green .settings__panel {
+  background-color: $color-settings-background-green;
+  color: $color-text-dark;
+}
+
 // Winning effects
 .sunburst {
   position: absolute;
@@ -220,4 +225,11 @@
   left: 0;
   z-index: $z-index-confetti;
   pointer-events: none;
+}
+
+#yehey-japan-draw {
+  margin: 0 0 100px 0 !important;
+  font-size: 40px;
+  font-weight: 950;
+  color: black;
 }
