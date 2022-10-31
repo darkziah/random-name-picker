@@ -1,0 +1,19 @@
+#winnerHeader {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+
+  #winnerL {
+    margin: 0 15vw;
+    width: 100%;
+  }
+}
+
+#winner {
+  display: flex;
+  justify-content: center;
+
+  .li {
+    margin: 1vw 15vw;
+  }
+}

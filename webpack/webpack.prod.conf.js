@@ -44,7 +44,7 @@ module.exports = merge(baseWebpackConfig, {
     }),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: false,
-      skipWaiting: false
+      skipWaiting: true
     }),
     new BundleAnalyzerPlugin({
       analyzerMode: 'static',

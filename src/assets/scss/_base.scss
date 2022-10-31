@@ -57,7 +57,7 @@ body {
     $color-purple-step1 0.13%,
     $color-purple-step2 23.02%,
     $color-purple-step3 46.22%,
-    $color-purple-step4 69.56%,
+    i $color-purple-step4 69.56%,
     $color-purple-step5 92.87%,
     $color-purple-step6 100%
   );
@@ -65,15 +65,7 @@ body {
 }
 
 .theme--green {
-  background: linear-gradient(
-    0deg,
-    $color-green-step1 0.13%,
-    $color-green-step2 23.02%,
-    $color-green-step3 46.22%,
-    $color-green-step4 69.56%,
-    $color-green-step5 92.87%,
-    $color-green-step6 100%
-  );
+  background: $color-remit;
   color: $color-text-light;
 }
 

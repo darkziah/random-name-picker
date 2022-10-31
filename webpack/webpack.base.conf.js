@@ -50,6 +50,14 @@ module.exports = {
         collapseWhitespace: true
       }
     }),
+    new HtmlWebpackPlugin({
+      filename: 'winner.html',
+      template: path.resolve(__dirname, '../src/winner.pug'),
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true
+      }
+    }),
     new HtmlVariablesPlugin(process.env)
   ],
   resolve: {

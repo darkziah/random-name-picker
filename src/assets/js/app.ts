@@ -1,7 +1,43 @@
 import confetti from 'canvas-confetti';
 import Slot from '@js/Slot';
 import SoundEffects from '@js/SoundEffects';
-import { get } from 'lodash';
+import { get, map } from 'lodash';
+import Airtable from 'airtable';
+import axios from 'axios';
+import { io } from 'socket.io-client';
+
+Airtable.configure({
+  endpointUrl: 'https://api.airtable.com',
+  apiKey: 'key5s8eRImN47ypvV'
+});
+
+// const trackBase = Airtable.base('app0Vi7IfFDLGEvMi');
+
+const axiosInst = axios.create({
+  baseURL: process.env.APP_AXIOS_BASE_URL
+});
+
+const getData = async () => {
+  const { data } = await axiosInst.get('test');
+  return data;
+};
+
+// const all: Record<FieldSet>[] = [];
+// trackBase('Gadget').select({
+// eslint-disable-next-line max-len, max-len
+//   // filterByFormula: `AND(IS_AFTER({Process Date}, "${moment().subtract(7, 'day').format('YYYY-MM-DD')}"), IS_BEFORE({Process Date}, "${moment().format('YYYY-MM-DD')}"))`,
+//   view: 'Bot',
+//   maxRecords: 100000000,
+//   pageSize: 100
+// }).eachPage((d, fetchNextPage) => {
+//   d.forEach((record) => {
+//     all.push(record);
+//   });
+
+//   fetchNextPage();
+// }, (err) => {
+//   if (err) { console.error(err); }
+// });
 
 // Initialize slot machine
 (() => {
@@ -19,6 +55,14 @@ import { get } from 'lodash';
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
   const reactCountInput = document.getElementById('real-count') as HTMLInputElement | null;
 
+  const winner = document.getElementById('winner') as HTMLDivElement | null;
+
+  let data = [];
+
+  getData().then((datas) => {
+    data = datas;
+  });
+
   // Graceful exit if necessary elements are not found
   if (!(
     drawButton
@@ -35,9 +79,29 @@ import { get } from 'lodash';
     && enableSoundCheckbox
     && reactCountInput
   )) {
+    if (winner) {
+      return;
+    }
     console.error('One or more Element ID is invalid. This is possibly a bug.');
     return;
   }
+
+  const socket = io('http://localhost:4000');
+
+  // eslint-disable-next-line no-shadow
+  socket.on('winner', (data: unknown) => {
+    // const winDiv = document.createElement('div');
+    // winDiv.setAttribute('id', 'winner');
+
+    // const li = document.createElement('div');
+    // li.setAttribute('class', 'li');
+    // li.outerText = '123';
+
+    // winDiv.append(li);
+
+    // winnerList!.append();
+    console.log(data, 'thhe data');
+  });
 
   if (!(confettiCanvas instanceof HTMLCanvasElement)) {
     console.error('Confetti canvas is not an instance of Canvas. This is possibly a bug.');
@@ -110,7 +174,8 @@ import { get } from 'lodash';
 
   /** To open the setting page */
   const onSettingsOpen = () => {
-    nameListTextArea.value = slot.names.length ? slot.names.join('\n') : '';
+    console.log('🚀 ~ file: app.ts ~ line 41 ~ da', data.length);
+    nameListTextArea.value = map(data, 'name').join('\n'); // slot.names.length ? slot.names.join('\n') : '';
     removeNameFromListCheckbox.checked = slot.shouldRemoveWinnerFromNameList;
     enableSoundCheckbox.checked = !soundEffects.mute;
     settingsWrapper.style.display = 'block';
@@ -118,6 +183,7 @@ import { get } from 'lodash';
 
   /** To close the setting page */
   const onSettingsClose = () => {
+    console.log(slot.names);
     settingsContent.scrollTop = 0;
     settingsWrapper.style.display = 'none';
   };
@@ -134,7 +200,7 @@ import { get } from 'lodash';
       onSettingsOpen();
       return;
     }
-    slot.spin(MAX_REEL_ITEMS);
+    slot.spin(MAX_REEL_ITEMS, socket);
   });
 
   // Hide fullscreen button when it is not supported

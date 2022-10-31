@@ -8,6 +8,7 @@ import '@styles/index.scss';
 
 // main
 import '@js/app';
+import '@js/back';
 
 // PWA
 if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {

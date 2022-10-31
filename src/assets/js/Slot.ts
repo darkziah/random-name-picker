@@ -1,3 +1,5 @@
+import { Socket } from 'socket.io-client';
+
 interface SlotConfigurations {
   /** User configuration for maximum item inside a reel */
   maxReelItems?: number;
@@ -161,7 +163,7 @@ export default class Slot {
    * Function for spinning the slot
    * @returns Whether the spin is completed successfully
    */
-  public async spin(realItem?: number): Promise<boolean> {
+  public async spin(realItem: number, socket: Socket): Promise<boolean> {
     if (!this.nameList.length) {
       console.error('Name List is empty. Cannot start spinning.');
       return false;
@@ -227,6 +229,10 @@ export default class Slot {
     console.log('Max item: ', this.maxReelItems);
     console.log('Displayed items: ', randomNames);
     console.log('Winner: ', randomNames[randomNames.length - 1]);
+
+    socket.emit('draw', {
+      winner: randomNames[randomNames.length - 1]
+    });
 
     // Remove winner form name list if necessary
     if (shouldRemoveWinner) {
