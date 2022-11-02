@@ -55,11 +55,12 @@ const getData = async () => {
   const enableSoundCheckbox = document.getElementById('enable-sound') as HTMLInputElement | null;
   const reactCountInput = document.getElementById('real-count') as HTMLInputElement | null;
 
-  const winner = document.getElementById('winner') as HTMLDivElement | null;
+  const winner = document.getElementById('winnerList') as HTMLDivElement | null;
 
   let data = [];
 
   getData().then((datas) => {
+    global.remitData = data;
     data = datas;
   });
 
@@ -89,19 +90,6 @@ const getData = async () => {
   const socket = io('http://localhost:4000');
 
   // eslint-disable-next-line no-shadow
-  socket.on('winner', (data: unknown) => {
-    // const winDiv = document.createElement('div');
-    // winDiv.setAttribute('id', 'winner');
-
-    // const li = document.createElement('div');
-    // li.setAttribute('class', 'li');
-    // li.outerText = '123';
-
-    // winDiv.append(li);
-
-    // winnerList!.append();
-    console.log(data, 'thhe data');
-  });
 
   if (!(confettiCanvas instanceof HTMLCanvasElement)) {
     console.error('Confetti canvas is not an instance of Canvas. This is possibly a bug.');
@@ -200,7 +188,7 @@ const getData = async () => {
       onSettingsOpen();
       return;
     }
-    slot.spin(MAX_REEL_ITEMS, socket);
+    slot.spin(MAX_REEL_ITEMS, socket, data);
   });
 
   // Hide fullscreen button when it is not supported
